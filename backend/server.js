@@ -18,7 +18,7 @@ const app = express();
 // app.use(cors());
 
 const allowedOrigins = [
-  "https://foggcomputing.netlify.app/",
+  "https://foggcomputing.netlify.app",
   "http://localhost:5173",
 ];
 
