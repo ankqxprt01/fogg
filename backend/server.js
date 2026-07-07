@@ -54,14 +54,22 @@ app.use("/api/files", require("./routes/fileRoutes"));
 app.use("/uploads", express.static("uploads"));
 
 const fs = require("fs");
-
+const path = require("path");
 app.get("/check-files", (req, res) => {
-  fs.readdir("uploads", (err, files) => {
+  const uploadPath = path.join(__dirname, "uploads");
+
+  fs.readdir(uploadPath, (err, files) => {
     if (err) {
-      return res.json({ error: err.message });
+      return res.json({
+        error: err.message,
+        path: uploadPath,
+      });
     }
 
-    res.json(files);
+    res.json({
+      path: uploadPath,
+      files,
+    });
   });
 });
 
