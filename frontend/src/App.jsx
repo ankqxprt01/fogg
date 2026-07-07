@@ -7,6 +7,8 @@ import BogusRoute from "./components/BogusRoute"; // ✅ MOVE HERE
 import Signup from "./pages/Signup";
 import "./App.css";
 import LoginRoute from "./components/LoginRoute";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 function App() {
   return (
@@ -44,9 +46,13 @@ function App() {
           }
         />
 
-        {/* 404 fallback */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+       
 
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+
+          {/* 404 fallback */}
+        <Route path="*" element={<Navigate to="/login" replace />} /> 
       </Routes>
     </Router>
   );
