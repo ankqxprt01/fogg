@@ -103,29 +103,6 @@ exports.getUsers = async (req, res) => {
 };
 
 
-// test sendgrid twilo
-// const sgMail = require('@sendgrid/mail');
-// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-// const msg = {
-//   to: 'antic354@gmail.com',                // recipient
-//   from: 'antic354@gmail.com',            // **must match verified sender**
-//   subject: 'SendGrid Test Email',
-//   text: 'Hello! This is a test email using SendGrid API',
-//   html: '<strong>Hello! This is a test email using SendGrid API</strong>',
-// };
-
-// sgMail
-//   .send(msg)
-//   .then(() => console.log('Email sent successfully!'))
-//   .catch((err) => console.error('SendGrid error:', err.response?.body || err));
-
-
-// forgot pass
-// const sgMail = require("@sendgrid/mail");
-
-// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
 exports.forgotPasswordEmail = async (req, res) => {
   try {
     const { email } = req.body;
@@ -157,7 +134,7 @@ exports.forgotPasswordEmail = async (req, res) => {
     // SEND EMAIL (NO DOMAIN NEEDED)
    const result = await resend.emails.send({
   // from: "onboarding@resend.dev",// this will send only on ashinde354
-  // from: "noreply@myprofilehere.sbs",// will send any email user
+  // from: "MyProfileHere <support@myprofilehere.sbs>",// will send any email user
   from: process.env.EMAIL_FROM,// from .env
   to: email,
   subject: "Your OTP Code",
