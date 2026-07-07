@@ -155,19 +155,21 @@ exports.forgotPasswordEmail = async (req, res) => {
     await user.save();
 
     // SEND EMAIL (NO DOMAIN NEEDED)
-    await resend.emails.send({
-      from: "onboarding@resend.dev",
-      to: email,
-      subject: "Your OTP Code",
-      html: `
-        <div style="font-family:Arial;padding:10px">
-          <h2>Password Reset OTP</h2>
-          <p>Your OTP is:</p>
-          <h1>${otp}</h1>
-          <p>This OTP is valid for 10 minutes.</p>
-        </div>
-      `,
-    });
+   const result = await resend.emails.send({
+  from: "onboarding@resend.dev",
+  to: email,
+  subject: "Your OTP Code",
+  html: `
+    <div style="font-family:Arial;padding:10px">
+      <h2>Password Reset OTP</h2>
+      <p>Your OTP is:</p>
+      <h1>${otp}</h1>
+      <p>This OTP is valid for 10 minutes.</p>
+    </div>
+  `,
+});
+
+console.log("Resend result:", result);
 
     console.log("Resend result:", result);
 
