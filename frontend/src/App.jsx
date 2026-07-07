@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Bogus from "./pages/Bogus";
@@ -15,19 +20,25 @@ function App() {
   return (
     <Router>
       <Routes>
-
         {/* Default Route */}
         <Route path="/" element={<Navigate to="/login" replace />} />
 
         <Route
-  path="/login"
-  element={
-    <LoginRoute>
-      <Login />
-    </LoginRoute>
-  }
-/>
-        <Route path="/signup" element={<Signup />} />
+          path="/login"
+          element={
+            <LoginRoute>
+              <Login />
+            </LoginRoute>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <PublicRoute>
+              <Signup />
+            </PublicRoute>
+          }
+        />
 
         <Route
           path="/dashboard"
@@ -47,28 +58,26 @@ function App() {
           }
         />
 
-       
+        <Route
+          path="/forgot-password"
+          element={
+            <PublicRoute>
+              <ForgotPassword />
+            </PublicRoute>
+          }
+        />
 
         <Route
-        path="/forgot-password"
-        element={
-          <PublicRoute>
-            <ForgotPassword />
-          </PublicRoute>
-        }
-      />
+          path="/reset-password"
+          element={
+            <PublicRoute>
+              <ResetPassword />
+            </PublicRoute>
+          }
+        />
 
-        <Route
-        path="/reset-password"
-        element={
-          <PublicRoute>
-            <ResetPassword />
-          </PublicRoute>
-        }
-      />
-
-          {/* 404 fallback */}
-        <Route path="*" element={<Navigate to="/login" replace />} /> 
+        {/* 404 fallback */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
   );
