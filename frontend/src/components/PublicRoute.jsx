@@ -4,14 +4,11 @@ function PublicRoute({ children }) {
   const token = localStorage.getItem("token");
   const bogusMode = localStorage.getItem("bogusMode");
 
-  console.log("token:", token);
-  console.log("bogusMode:", bogusMode);
-
   if (token) {
     return <Navigate to="/dashboard" replace />;
   }
 
-  if (bogusMode) {
+   if (bogusMode === "true") {
     return <Navigate to="/myuser" replace />;
   }
 
