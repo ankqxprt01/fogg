@@ -19,6 +19,20 @@ function Dashboard() {
     fetchFiles();
   }, []);
 
+  useEffect(() => {
+  window.history.pushState(null, "", window.location.href);
+
+  const handleBackButton = () => {
+    window.history.pushState(null, "", window.location.href);
+  };
+
+  window.addEventListener("popstate", handleBackButton);
+
+  return () => {
+    window.removeEventListener("popstate", handleBackButton);
+  };
+}, []);
+
   const showToast = (type, message) => {
     toastRef.current?.show(type, message);
   };
