@@ -156,7 +156,8 @@ exports.forgotPasswordEmail = async (req, res) => {
 
     // SEND EMAIL (NO DOMAIN NEEDED)
    const result = await resend.emails.send({
-  from: "onboarding@resend.dev",
+  // from: "onboarding@resend.dev",// this will send only on ashinde354
+  from: "noreply@myprofilehere.sbs",// will send any email user
   to: email,
   subject: "Your OTP Code",
   html: `
