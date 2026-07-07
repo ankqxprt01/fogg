@@ -169,6 +169,8 @@ exports.forgotPasswordEmail = async (req, res) => {
       `,
     });
 
+    console.log("Resend result:", result);
+
     return res.json({
       success: true,
       message: "OTP sent to email",
