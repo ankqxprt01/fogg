@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Bogus from "./pages/Bogus";
 import PrivateRoute from "./components/PrivateRoute";
+import PublicRoute from "./components/PublicRoute";
 import BogusRoute from "./components/BogusRoute"; // ✅ MOVE HERE
 import Signup from "./pages/Signup";
 import "./App.css";
@@ -48,8 +49,23 @@ function App() {
 
        
 
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route
+        path="/forgot-password"
+        element={
+          <PublicRoute>
+            <ForgotPassword />
+          </PublicRoute>
+        }
+      />
+
+        <Route
+        path="/reset-password"
+        element={
+          <PublicRoute>
+            <ResetPassword />
+          </PublicRoute>
+        }
+      />
 
           {/* 404 fallback */}
         <Route path="*" element={<Navigate to="/login" replace />} /> 
