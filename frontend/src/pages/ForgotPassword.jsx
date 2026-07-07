@@ -6,7 +6,7 @@ function ForgotPassword() {
   const [form, setForm] = useState({ email: "" });
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -14,28 +14,30 @@ function ForgotPassword() {
     e.preventDefault();
 
     try {
+      setLoading(true);
+
       const { data } = await API.post("/forgot-password", {
         email: form.email,
       });
 
-      // setMessage(`OTP sent! (DEV ONLY: ${data.otp})`);
       setMessage("Sending OTP...");
 
-     // show OTP sent message after API success
-    setTimeout(() => {
-      setMessage("OTP sent to your email!");
+      setTimeout(() => {
+        setMessage("OTP sent to your email!");
 
-      navigate("/reset-password", {
-        state: { email: form.email },
-      });
-      sessionStorage.setItem("resetEmail", form.email);
-    }, 3000); // 3 seconds delay
+        navigate("/reset-password", {
+          state: { email: form.email },
+        });
+        sessionStorage.setItem("resetEmail", form.email);
+
+        setLoading(false);
+      }, 3000);
     } catch (err) {
       console.log(err.response?.data);
       setMessage(err.response?.data?.message || "Error");
+      setLoading(false);
     }
   };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-96">
@@ -61,9 +63,10 @@ function ForgotPassword() {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition disabled:bg-blue-400"
           >
-            Send OTP
+            {loading ? "Sending OTP..." : "Send OTP"}
           </button>
         </form>
       </div>
