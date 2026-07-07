@@ -27,6 +27,7 @@ function ForgotPassword() {
 
       navigate("/reset-password", {
         state: { email: form.email },
+        replace: true,
       });
     }, 3000); // 3 seconds delay
     } catch (err) {

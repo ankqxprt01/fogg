@@ -15,6 +15,10 @@ function ResetPassword() {
 
   const email = location.state?.email;
 
+  if (!email) {
+    return <Navigate to="/forgot-password" replace />;
+  }
+
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -31,7 +35,7 @@ function ResetPassword() {
       setMessage(data.message);
 
       setTimeout(() => {
-        navigate("/login");
+        navigate("/login", { replace: true });
       }, 2000);
 
     } catch (err) {
