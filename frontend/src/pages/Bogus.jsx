@@ -19,19 +19,21 @@ function Bogus() {
     toastRef.current?.show(type, message);
   };
 
-  useEffect(() => {
-    const bogusMode = localStorage.getItem("bogusMode");
-    const token = localStorage.getItem("token");
+ useEffect(() => {
+  const bogusMode = localStorage.getItem("bogusMode");
+  const token = localStorage.getItem("token");
 
-    if (bogusMode) {
-      navigate("/myuser", { replace: true });
-      return;
-    }
-
+  if (!bogusMode) {
     if (token) {
       navigate("/dashboard", { replace: true });
+    } else {
+      navigate("/login", { replace: true });
     }
-  }, [navigate]);
+    return;
+  }
+
+  fetchFiles();
+}, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
