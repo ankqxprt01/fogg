@@ -60,9 +60,15 @@ function Bogus() {
       setFile(null);
       fetchFiles();
     } catch (err) {
-      console.error(err);
-      showToast("danger", "Upload failed");
-    }
+  console.error(err);
+
+    const message =
+      err.response?.data?.message ||
+      err.response?.data?.error ||
+      "Upload failed";
+
+    showToast("danger", message);
+  }
   };
 
   const handleDelete = async (fileId) => {
@@ -95,7 +101,13 @@ function Bogus() {
       fetchFiles();
     } catch (err) {
       console.error(err);
-      showToast("danger", "Update failed");
+
+      const message =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Update failed";
+
+      showToast("danger", message);
     }
   };
 

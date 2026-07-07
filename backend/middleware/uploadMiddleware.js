@@ -18,6 +18,7 @@ const fileFilter = (req, file, cb) => {
     "image/png",
     "image/jpeg",  // Added
     "image/jpg",   // Added
+    "image/webp",
     "application/pdf",
     "text/plain",
   ];
