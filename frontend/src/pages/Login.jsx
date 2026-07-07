@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) =>
@@ -19,6 +20,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const { data } = await API.post("/login", form);
@@ -37,7 +39,7 @@ function Login() {
       } else {
         showToast(
           "danger",
-          data.message || `Wrong password. Attempts left: ${data.attemptsLeft}`
+          data.message || `Wrong password. Attempts left: ${data.attemptsLeft}`,
         );
       }
     } catch (error) {
@@ -47,6 +49,8 @@ function Login() {
         console.error(error);
         showToast("danger", "Something went wrong. Try again.");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -139,56 +143,88 @@ function Login() {
         <div className="ml-3 text-sm font-normal toast-message"></div>
       </div>
 
-     {/* Login Form */}
-<div className="bg-white p-8 rounded-2xl shadow-lg w-96">
-  <h2 className="text-2xl font-bold text-center mb-6 text-blue-600">
-    Login
-  </h2>
+      {/* Login Form */}
+      <div className="bg-white p-8 rounded-2xl shadow-lg w-96">
+        <h2 className="text-2xl font-bold text-center mb-6 text-blue-600">
+          Login
+        </h2>
 
-  <form onSubmit={handleSubmit}>
-    <input
-      name="email"
-      placeholder="Email"
-      onChange={handleChange}
-      className="w-full mb-4 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-    />
-    <input
-      name="password"
-      type="password"
-      placeholder="Password"
-      onChange={handleChange}
-      className="w-full mb-4 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-    />
+        <form onSubmit={handleSubmit}>
+          <input
+            name="email"
+            placeholder="Email"
+            onChange={handleChange}
+            className="w-full mb-4 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            onChange={handleChange}
+            className="w-full mb-4 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
 
-    {/* Forgot Password link styled */}
-    <div className="text-center mb-6">
-      <Link
-        to="/forgot-password"
-        className="text-sm text-blue-600 hover:text-blue-800 hover:underline transition"
-        replace
-      >
-        Forgot Password?
-      </Link>
-    </div>
+          {/* Forgot Password link styled */}
+          <div className="text-center mb-6">
+            <Link
+              to="/forgot-password"
+              className="text-sm text-blue-600 hover:text-blue-800 hover:underline transition"
+              replace
+            >
+              Forgot Password?
+            </Link>
+          </div>
 
-    <button
-      type="submit"
-      className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition"
-    >
-      Login
-    </button>
-  </form>
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full p-3 rounded-lg flex items-center justify-center transition
+    ${
+      loading
+        ? "bg-blue-400 cursor-not-allowed"
+        : "bg-blue-600 hover:bg-blue-700"
+    } text-white`}
+          >
+            {loading ? (
+              <>
+                <svg
+                  className="animate-spin h-5 w-5 mr-2"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
+                </svg>
+                Logging in...
+              </>
+            ) : (
+              "Login"
+            )}
+          </button>
+        </form>
 
-  <p className="text-center mt-6 text-gray-600">
-    Don't have an account?{" "}
-    <Link
-      to="/signup"
-      className="text-blue-600 font-semibold hover:underline"
-    >
-      Signup
-    </Link>
-  </p>
-</div>
+        <p className="text-center mt-6 text-gray-600">
+          Don't have an account?{" "}
+          <Link
+            to="/signup"
+            className="text-blue-600 font-semibold hover:underline"
+          >
+            Signup
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
