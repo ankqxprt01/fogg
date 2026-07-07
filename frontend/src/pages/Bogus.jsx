@@ -12,6 +12,8 @@ function Bogus() {
   const [user, setUser] = useState(null);
 
   const toastRef = useRef();
+  const uploadInputRef = useRef(null);
+  const editInputRef = useRef(null);
 
   const showToast = (type, message) => {
     toastRef.current?.show(type, message);
@@ -35,7 +37,9 @@ function Bogus() {
     navigate("/login", { replace: true });
   };
 
-  const handleFileChange = (e) => setFile(e.target.files[0]);
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
 
   const fetchFiles = async () => {
     try {
@@ -48,27 +52,40 @@ function Bogus() {
   };
 
   const handleUpload = async () => {
-    if (!file) return showToast("warning", "Select a file first");
+    if (!file) {
+      return showToast("warning", "Select a file first");
+    }
+
     const formData = new FormData();
     formData.append("file", file);
 
     try {
       await API.post("/files/bogus-upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
+
       showToast("success", "File uploaded successfully!");
+
       setFile(null);
+
+      // Clear upload input
+      if (uploadInputRef.current) {
+        uploadInputRef.current.value = "";
+      }
+
       fetchFiles();
     } catch (err) {
-  console.error(err);
+      console.error(err);
 
-    const message =
-      err.response?.data?.message ||
-      err.response?.data?.error ||
-      "Upload failed";
+      const message =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Upload failed";
 
-    showToast("danger", message);
-  }
+      showToast("danger", message);
+    }
   };
 
   const handleDelete = async (fileId) => {
@@ -84,19 +101,39 @@ function Bogus() {
     }
   };
 
-  const handleEdit = (fileId) => setEditFileId(fileId);
+  const handleEdit = (fileId) => {
+    setEditFileId(fileId);
+    setFile(null);
+
+    if (editInputRef.current) {
+      editInputRef.current.value = "";
+    }
+  };
 
   const handleEditSubmit = async () => {
-    if (!file) return showToast("warning", "Select a new file first");
+    if (!file) {
+      return showToast("warning", "Select a new file first");
+    }
+
     const formData = new FormData();
     formData.append("file", file);
 
     try {
       await API.put(`/files/bogus-file/${editFileId}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
+
       showToast("success", "File updated successfully!");
+
       setFile(null);
+
+      // Clear edit input
+      if (editInputRef.current) {
+        editInputRef.current.value = "";
+      }
+
       setEditFileId(null);
       fetchFiles();
     } catch (err) {
@@ -119,8 +156,17 @@ function Bogus() {
       <div className="p-4 max-w-3xl mx-auto">
         {/* Upload */}
         <div className="flex flex-col sm:flex-row gap-2 mb-4 items-center">
-          <input type="file" onChange={handleFileChange} className="w-full sm:flex-1 border border-gray-800" />
-          <button onClick={handleUpload} className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 w-full sm:w-auto">
+          <input
+            ref={uploadInputRef}
+            type="file"
+            onChange={handleFileChange}
+            className="w-full sm:flex-1 border border-gray-800"
+          />
+
+          <button
+            onClick={handleUpload}
+            className="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 w-full sm:w-auto"
+          >
             Upload
           </button>
         </div>
@@ -128,7 +174,10 @@ function Bogus() {
         {/* File list */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filesList.map((f) => (
-            <div key={f._id} className="bg-gray-100 p-2 rounded flex flex-col items-center gap-2">
+            <div
+              key={f._id}
+              className="bg-gray-100 p-2 rounded flex flex-col items-center gap-2"
+            >
               {f.mimetype.startsWith("image/") ? (
                 <img
                   src={`https://fogg-wprg.onrender.com/${f.path}`}
@@ -153,6 +202,7 @@ function Bogus() {
                 >
                   Edit
                 </button>
+
                 <button
                   onClick={() => handleDelete(f._id)}
                   className="bg-red-500 px-3 py-1 rounded hover:bg-red-600"
@@ -169,7 +219,14 @@ function Bogus() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded shadow-md w-96">
               <h3 className="text-lg font-semibold mb-4">Edit File</h3>
-              <input type="file" onChange={handleFileChange} className="mb-4 w-full" />
+
+              <input
+                ref={editInputRef}
+                type="file"
+                onChange={handleFileChange}
+                className="mb-4 w-full"
+              />
+
               <div className="flex justify-end gap-2">
                 <button
                   onClick={() => setEditFileId(null)}
@@ -177,6 +234,7 @@ function Bogus() {
                 >
                   Cancel
                 </button>
+
                 <button
                   onClick={handleEditSubmit}
                   className="px-3 py-1 rounded bg-yellow-500 text-white hover:bg-yellow-600"
