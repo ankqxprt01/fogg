@@ -13,7 +13,7 @@ function ResetPassword() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const email = location.state?.email;
+ const email = location.state?.email || sessionStorage.getItem("resetEmail");
 
   if (!email) {
     return <Navigate to="/forgot-password" replace />;
@@ -35,8 +35,9 @@ function ResetPassword() {
       setMessage(data.message);
 
       setTimeout(() => {
-        navigate("/login", { replace: true });
-      }, 2000);
+      sessionStorage.removeItem("resetEmail");
+      navigate("/login", { replace: true });
+    }, 2000);
 
     } catch (err) {
       setMessage(err.response?.data?.message || "Error");

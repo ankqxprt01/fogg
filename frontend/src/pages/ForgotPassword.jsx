@@ -27,8 +27,8 @@ function ForgotPassword() {
 
       navigate("/reset-password", {
         state: { email: form.email },
-        replace: true,
       });
+      sessionStorage.setItem("resetEmail", form.email);
     }, 3000); // 3 seconds delay
     } catch (err) {
       console.log(err.response?.data);
