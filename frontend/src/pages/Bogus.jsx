@@ -21,12 +21,15 @@ function Bogus() {
 
   useEffect(() => {
     const bogusMode = localStorage.getItem("bogusMode");
-    if (!bogusMode) {
-      navigate("/login", { replace: true });
-    } else {
-      fetchFiles();
-      const storedUser = JSON.parse(localStorage.getItem("user"));
-      setUser(storedUser);
+    const token = localStorage.getItem("token");
+
+    if (bogusMode) {
+      navigate("/myuser", { replace: true });
+      return;
+    }
+
+    if (token) {
+      navigate("/dashboard", { replace: true });
     }
   }, [navigate]);
 
