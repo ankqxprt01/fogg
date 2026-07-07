@@ -53,6 +53,18 @@ app.use("/api/files", require("./routes/fileRoutes"));
 // Make uploads folder static so frontend can access files
 app.use("/uploads", express.static("uploads"));
 
+const fs = require("fs");
+
+app.get("/check-files", (req, res) => {
+  fs.readdir("uploads", (err, files) => {
+    if (err) {
+      return res.json({ error: err.message });
+    }
+
+    res.json(files);
+  });
+});
+
 // gmail test http://localhost:5000/test-mail
 // app.get("/test-mail", async (req, res) => {
 //   try {
