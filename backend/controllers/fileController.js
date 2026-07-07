@@ -20,7 +20,7 @@ exports.uploadFile = async (req, res) => {
       filename: req.file.filename,
       originalname: req.file.originalname,
       mimetype: req.file.mimetype,
-      path: req.file.path,
+      path: "uploads/" + req.file.filename,
     });
 
     await user.save();
@@ -85,7 +85,7 @@ exports.editFile = async (req, res) => {
       filename: req.file.filename,
       originalname: req.file.originalname,
       mimetype: req.file.mimetype,
-      path: req.file.path,
+      path: "uploads/" + req.file.filename,
     };
 
     await user.save();
@@ -118,7 +118,7 @@ exports.uploadBogusFile = async (req, res) => {
       filename: req.file.filename,
       originalname: req.file.originalname,
       mimetype: req.file.mimetype,
-      path: req.file.path,
+      path: "uploads/" + req.file.filename,
     });
 
     await user.save();
@@ -173,7 +173,7 @@ exports.editBogusFile = async (req, res) => {
       filename: req.file.filename,
       originalname: req.file.originalname,
       mimetype: req.file.mimetype,
-      path: req.file.path,
+      path: "uploads/" + req.file.filename,
     };
 
     await user.save();
