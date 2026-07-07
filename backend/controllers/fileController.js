@@ -7,6 +7,9 @@ exports.uploadFile = async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ message: "No file uploaded" });
 
+    console.log(req.file);
+    console.log(fs.existsSync(req.file.path));
+
     const user = await User.findById(req.user);
     if (!user) return res.status(404).json({ message: "User not found" });
 
